@@ -4,17 +4,13 @@ namespace Tests\Unit;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class UserTest extends TestCase {
   use RefreshDatabase;
-  use WithoutMiddleware;
 
-  /** @ test */
+  /** @test */
   public function user_can_login_with_correct_credentials() {
-    $this->withoutExceptionHandling();
-
     $user = factory(User::class)->create();
     
     $response = $this->post('/login', [
@@ -24,8 +20,6 @@ class UserTest extends TestCase {
 
     $response->assertRedirect('/home');
 
-    $this->assertEquals(200, $response->getStatusCode());
-    
     $this->assertAuthenticatedAs($user);
   }
 
