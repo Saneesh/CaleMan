@@ -74,8 +74,7 @@ class EventController extends Controller
                 'user_id' => $user->id,
                 'event_date_id' => $eventDate->id,
                 'slot_start' => $slot['start'],
-                'slot_end' => $slot['end'],
-                'is_scheduled' => $request->is_scheduled
+                'slot_end' => $slot['end']
             ]);    
         }
 
@@ -92,7 +91,7 @@ class EventController extends Controller
      */
     public function show(Request $request)
     {
-        $event = $this->user->getEventsByDate([
+        $event = $this->eventDate->getEventsByDate([
             'user_id' => $request->user_id,      
             'event_date' => $request->event_date
         ]);
@@ -132,5 +131,23 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    /**
+     * Book an event.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function book(Request $request) {
+        //return $request->all();
+
+        $this->eventDate->bookEvent([
+            'user_id' => $request->user_id,
+            'inviter_id' => $request->inviter_id,
+            'event_date' => $request->event_date,
+            'slot_start' => $request->slot_start,
+            'slot_end' => $request->slot_end
+        ]);
     }
 }

@@ -16,7 +16,8 @@ class EventTimeResource extends JsonResource
     {
         return [
             'slot_start' => $this->slot_start,
-            'slot_end' => $this->slot_end
+            'slot_end' => $this->slot_end,
+            'is_booked' => $this->is_booked
         ];
     }
 }

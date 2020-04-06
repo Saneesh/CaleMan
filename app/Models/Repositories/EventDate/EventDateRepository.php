@@ -3,6 +3,7 @@
 namespace App\Models\Repositories\EventDate;
 
 use App\Models\Entities\EventDate;
+use App\Models\Entities\User;
 
 class EventDateRepository implements EventDateRepositoryInterface
 {
@@ -16,15 +17,16 @@ class EventDateRepository implements EventDateRepositoryInterface
      *
      * @return EventRepository
      */
-    public function __construct(EventDate $eventDate)
+    public function __construct(EventDate $eventDate, User $user)
     {
         $this->eventDate = $eventDate;
+        $this->user = $user;
     }
 
     /**
      * Returns the event object associated with the passed id.
      *
-     * @param mixed $eventId
+     * @param mixed $eventDateId
      *
      * @return Model
      */
@@ -33,6 +35,13 @@ class EventDateRepository implements EventDateRepositoryInterface
         return $this->eventDate::findOrFail($eventDateId);
     }
 
+    /**
+     * Get events of a user by date.
+     *
+     * @param array $attributes
+     *
+     * @return Model
+     */
     public function getEventsByDate(array $attributes) {
         return auth()->user()::with([
             'eventDates' => function ($query) use ($attributes) {
@@ -44,12 +53,32 @@ class EventDateRepository implements EventDateRepositoryInterface
     }
 
     /**
+     * Book an event.
+     *
+     * @param array $attributes
+     *
+     * @return Model
+     */
+    public function bookEvent(array $attributes)
+    {
+        $inviter = $this->user::where(['id' => $attributes['inviter_id']])->first();
+
+        return $inviter->eventDates([
+            'event_date' => $attributes['event_date']
+        ])
+        ->first()
+        ->eventTimes([
+            'slot_start' => $attributes['slot_start'],
+            'slot_end' => $attributes['slot_end']
+        ])->update(['event_times.is_booked' => true]);
+    }
+
+    /**
      * @param array $attributes
      * @return mixed
      */
-    public function create(array $attributes) {
+    public function create(array $attributes)
+    {
         return $this->eventDate::create($attributes);
     }
-
-    
 }

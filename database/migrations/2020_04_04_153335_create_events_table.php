@@ -22,7 +22,7 @@ class CreateEventsTable extends Migration
             $table->date('event_date_id');
             $table->time('time_slot_start');
             $table->time('time_slot_end');
-            $table->boolean('is_scheduled')->default(false);
+            $table->boolean('is_booked')->default(false);
 
             $table->timestamps();
         });

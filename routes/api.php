@@ -30,6 +30,7 @@ Route::group([
   Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/events', 'EventController@store');
     Route::post('/events/list', 'EventController@show');
+    Route::post('/events/book', 'EventController@book');
 
   });
 

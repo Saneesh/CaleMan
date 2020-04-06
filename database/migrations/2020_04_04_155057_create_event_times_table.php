@@ -17,10 +17,10 @@ class CreateEventTimesTable extends Migration
             $table->id();
 
             $table->integer('user_id');
-            $table->date('event_date_id');
+            $table->integer('event_date_id');
             $table->time('slot_start');
             $table->time('slot_end');
-            $table->boolean('is_scheduled')->default(false);
+            $table->boolean('is_booked')->default(false);
 
             $table->timestamps();
         });

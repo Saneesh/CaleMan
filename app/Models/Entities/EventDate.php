@@ -8,22 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class EventDate extends Model
 {
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-    'user_id', 
-    'event_date'
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'event_date'
+    ];
 
-  public function users() {
-    return $this->belongsToMany(User::class);
-  }
-    
-  public function eventTimes()
-  {
-    return $this->hasMany(EventTime::class);
-  }
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function eventTimes()
+    {
+        return $this->hasMany(EventTime::class);
+    }
 }
