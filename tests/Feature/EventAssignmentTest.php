@@ -107,15 +107,32 @@ class EventAssignmentTest extends TestCase
     }
 
     /**
-     * @ test
+     * @test
      */
     public function an_unauthenticated_user_get_error_message() {
+        // $this->withoutExceptionHandling();
 
+        $user = factory(User::class)->create();
+
+        $response = self::createSlot($user);
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json'            
+        ])->post('/api/v1/events/list', [
+            'user_id' => $user->id,
+            'event_date' => Carbon::create('2020-04-05')
+        ]);
+
+        $response->assertStatus(401);
+
+        $response->assertJson([
+            'message' => 'Unauthenticated.'
+        ]);
     }
 
     private function createSlot($user)
     {
-        Passport::actingAs($user);
+        //Passport::actingAs($user);
 
         return $this->post('/api/v1/events', [
             'user_id' => $user->id,
