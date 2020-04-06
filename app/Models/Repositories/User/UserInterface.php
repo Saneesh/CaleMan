@@ -7,7 +7,5 @@ interface UserInterface
     /**
      * Get user by id.
      */
-    public function getUserById($userId);
-
-    public function getEventsByDate(array $attributes);
+    public function getUserById($userId);    
 }

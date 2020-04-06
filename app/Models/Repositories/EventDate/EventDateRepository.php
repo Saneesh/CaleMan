@@ -33,6 +33,16 @@ class EventDateRepository implements EventDateRepositoryInterface
         return $this->eventDate::findOrFail($eventDateId);
     }
 
+    public function getEventsByDate(array $attributes) {
+        return auth()->user()::with([
+            'eventDates' => function ($query) use ($attributes) {
+                $query->whereDate('event_date', $attributes['event_date']);
+            }, 'eventTimes'])
+        ->where('id', $attributes['user_id'])
+        ->get()
+        ->first();
+    }
+
     /**
      * @param array $attributes
      * @return mixed

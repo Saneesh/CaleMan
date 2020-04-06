@@ -31,21 +31,5 @@ class UserRepository implements UserInterface
     public function getUserById($userId)
     {
         return $this->user::findOrFail($userId);
-    }
-
-    public function getEventsByDate(array $attributes) {
-        //return $this->user::with('EventDate', 'EventTime')->findOrFail($attributes);
-
-        //$userId = Auth::id();
-
-        // return $this->user::all();
-
-        return $this->user::with([
-            'eventDates' => function ($query) use ($attributes) {
-                $query->whereDate('event_date', $attributes['event_date']);
-            }, 'eventTimes'])
-        ->where('id', $attributes['user_id'])
-        ->get()
-        ->first();
-    }
+    }    
 }
