@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Models\Entities\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
