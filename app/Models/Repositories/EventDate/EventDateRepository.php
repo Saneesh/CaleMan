@@ -43,13 +43,7 @@ class EventDateRepository implements EventDateRepositoryInterface
      * @return Model
      */
     public function getEventsByDate(array $attributes) {
-        return auth()->user()::with([
-            'eventDates' => function ($query) use ($attributes) {
-                $query->whereDate('event_date', $attributes['event_date']);
-            }, 'eventTimes'])
-        ->where('id', $attributes['user_id'])
-        ->get()
-        ->first();
+        return auth()->user()->load('eventDates.eventTimes');
     }
 
     /**
