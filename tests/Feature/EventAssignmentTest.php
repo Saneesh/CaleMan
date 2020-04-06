@@ -37,7 +37,7 @@ class EventAssignmentTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $response->assertJson(['message' => 'Successfully assigned slots!']);
+        $response->assertJson(['message' => 'Successfully created the slots!']);
     }
 
     /**
@@ -101,6 +101,9 @@ class EventAssignmentTest extends TestCase
             'slot_end' => '10:00:00',
             'is_booked' => true
         ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['message' => 'Successfully assigned slots!']);
     }
 
     /**

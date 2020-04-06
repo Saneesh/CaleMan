@@ -79,7 +79,7 @@ class EventController extends Controller
         }
 
         return response()->json([
-            'message' => 'Successfully assigned slots!'
+            'message' => 'Successfully created the slots!'
         ]);
     }
 
@@ -148,6 +148,10 @@ class EventController extends Controller
             'event_date' => $request->event_date,
             'slot_start' => $request->slot_start,
             'slot_end' => $request->slot_end
+        ]);
+
+        return response()->json([
+            'message' => 'Successfully assigned slots!'
         ]);
     }
 }
