@@ -26,6 +26,13 @@ Route::group([
 ], function () {
   Route::post('register', 'AuthController@register');
   Route::post('login', 'AuthController@login'); 
+
+  Route::group(['middleware' => 'auth:api'], function() {
+    Route::post('/events', 'EventController@store');
+    Route::post('/events/list', 'EventController@show');
+
+  });
+
   
   // Route::resource('/users', 'UserController', [
   //   'except' => ['show', 'create', 'store']

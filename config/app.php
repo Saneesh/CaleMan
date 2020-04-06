@@ -177,6 +177,13 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * CaleMan Service providers
+         */
+        App\Models\Repositories\User\UserRepositoryServiceProvider::class,
+        App\Models\Repositories\EventDate\EventDateRepositoryServiceProvider::class,
+        App\Models\Repositories\EventTime\EventTimeRepositoryServiceProvider::class,
+
     ],
 
     /*
