@@ -114,7 +114,7 @@ class EventAssignmentTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = self::createSlot($user);
+        $response = self::createSlot($user, false);
 
         $response = $this->withHeaders([
             'Accept' => 'application/json'            
@@ -130,9 +130,11 @@ class EventAssignmentTest extends TestCase
         ]);
     }
 
-    private function createSlot($user)
+    private function createSlot($user, $isActingAs = true)
     {
-        //Passport::actingAs($user);
+        if($isActingAs) {
+            Passport::actingAs($user);    
+        }        
 
         return $this->post('/api/v1/events', [
             'user_id' => $user->id,
