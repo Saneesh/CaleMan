@@ -43,7 +43,20 @@ class EventDateRepository implements EventDateRepositoryInterface
      * @return Model
      */
     public function getEventsByDate(array $attributes) {
-        return auth()->user()->load('eventDates.eventTimes');
+        $user = $this->user::where(['id' => $attributes['user_id']])->first();
+
+        if(!$user) {
+            return false;
+        }
+
+        return $user::with([
+            'eventDates' => function ($query) use ($attributes) {
+                $query->whereDate('event_date', $attributes['event_date']);
+            }, 'eventTimes'])
+        ->where('id', $attributes['user_id'])
+        ->get()
+        ->first();
+
     }
 
     /**
@@ -57,14 +70,28 @@ class EventDateRepository implements EventDateRepositoryInterface
     {
         $inviter = $this->user::where(['id' => $attributes['inviter_id']])->first();
 
-        return $inviter->eventDates([
-            'event_date' => $attributes['event_date']
-        ])
-        ->first()
-        ->eventTimes([
-            'slot_start' => $attributes['slot_start'],
-            'slot_end' => $attributes['slot_end']
-        ])->update(['event_times.is_booked' => true]);
+        if(!$inviter) {
+            return false;
+        }
+
+        $eventDate = $inviter->eventDates()
+            ->where([
+                'event_date' => $attributes['event_date']
+            ])
+            ->first();
+
+        if(!$eventDate) {
+            return false;
+        }
+
+        $eventDate->eventTimes()
+            ->where([
+                'slot_start' => $attributes['slot_start'],
+                'slot_end' => $attributes['slot_end']
+            ])
+            ->update(['event_times.is_booked' => true]);
+
+        return true;
     }
 
     /**
