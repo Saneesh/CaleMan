@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EventListRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Entities\Event;
 use App\Models\Entities\EventDate;
@@ -89,12 +90,20 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(EventListRequest $request)
     {
         $event = $this->eventDate->getEventsByDate([
             'user_id' => $request->user_id,      
             'event_date' => $request->event_date
         ]);
+
+        if(!$event) {
+            return response()->json(['error' => 'Invalid user']);
+        }
+
+        if($event->eventDates->isEmpty()) {
+            return response()->json(['error' => 'No records exists for this event date']);
+        }
         
         return new EventResource($event);
     }
@@ -142,13 +151,17 @@ class EventController extends Controller
     public function book(Request $request) {
         //return $request->all();
 
-        $this->eventDate->bookEvent([
+        $bookEvent = $this->eventDate->bookEvent([
             'user_id' => $request->user_id,
             'inviter_id' => $request->inviter_id,
             'event_date' => $request->event_date,
             'slot_start' => $request->slot_start,
             'slot_end' => $request->slot_end
         ]);
+
+        if(!$bookEvent) {
+            return response()->json(['error' => 'Cannot book for this event']);
+        }
 
         return response()->json([
             'message' => 'Successfully assigned slots!'
